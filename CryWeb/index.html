@@ -1,24 +1,78 @@
-<!-- <include src="assets/head.html"/> -->
-<!doctype html>
-<html class="no-js" lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Cry Time</title>
-              <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="assets/front.css">
-    </head>
-    <body>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 700px; /* The height is 400 pixels */
+            width: 100%; /* The width is the width of the web page */
+        }
+    </style>
+</head>
+<body>
+    <h3>My Google Maps Demo</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+// Initialize and add the map
+function initMap() {
+  if (navigator.geolocation) {
+      var infoWindow = new google.maps.InfoWindow;   
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
 
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('Location found.');
+      }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+      });
+  } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+      
 
-        <div class="parallax"></div>
-        <div class="jumbotron">
-          <h1 class="display-4">Welcome to CryWeb!</h1>
-          <p class="lead">Having an existential crisis and need to place to cry or just scream out, but can't find the right place to go? With CryWeb, you can find the best places around campus... or something like that I dunno.</p>
-          <hr class="my-4">
-          <p></p>
-          <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Begin Crying</a>
-          </p>
-        </div>
-    </body>
+      
+                                                   
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRenderer = new google.maps.DirectionsRenderer();
+  
+  // The location of The Bee
+  var techGreen = {lat: 33.774695, lng: -84.397282};
+  // The map, centered at techGreen
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 17, center: techGreen});
+  // The marker, positioned at techGreen
+  var marker = new google.maps.Marker({position: techGreen, map: map});
+  var bigboi = new google.maps.Marker({position: pos, map: map});
+    
+  var request = {
+    origin: pos,
+    destination: techGreen,
+    travelMode: 'DRIVING'
+  };
+  directionsService.route(request, function(result, status) {
+    if (status == 'OK') {
+      directionsRenderer.setDirections(result);
+    }
+  });
+}
+        
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(map);
+}
+                                                   
+                                                   
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg96PuSTj7ZUxfX5XCwFi_AFM8wHPkMsY&callback=initMap">
+    </script>
+</body>
 </html>
